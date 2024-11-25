@@ -4,9 +4,9 @@ from .models import User
 class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'password']  # You can add more fields if needed
+        fields = ['username', 'password']
 
-    password = forms.CharField(widget=forms.PasswordInput)  # Hide the password input
+    password = forms.CharField(widget=forms.PasswordInput)  
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)

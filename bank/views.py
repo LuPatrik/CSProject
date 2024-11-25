@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import User
 from .forms import RegistrationForm, LoginForm
+from django.http import HttpResponse
 
 def index(request):
     return render(request, "index.html")
@@ -52,4 +53,14 @@ def bank_account(request):
         messages.error(request, 'User not found.')
         return redirect('login')
 
-    return render(request, 'bank_account.html', {'user': user})
+    response = render(request, 'bank_account.html', {'user': user})
+    """flaw 1"""
+    #response['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+    #response['Pragma'] = 'no-cache'
+    return response
+
+
+def logout(request):
+    request.session.flush()
+    messages.success(request, 'You have logged out successfully.')
+    return redirect('login')  
