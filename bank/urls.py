@@ -1,7 +1,11 @@
+# urls.py
 
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),  # Root URL
+    path('', views.index, name='index'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('bank_account/', views.bank_account, name='bank_account'),
 ]
