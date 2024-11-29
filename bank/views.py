@@ -4,6 +4,7 @@ from .forms import RegistrationForm, LoginForm
 from django.db import connection, transaction
 from django.contrib.auth.hashers import make_password, check_password
 from decimal import Decimal
+from django.views.decorators.cache import cache_control
 
 def index(request):
     return render(request, "index.html")
@@ -23,10 +24,13 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 #login that doesnt check for encrypted passwords
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
+            
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             try:
@@ -34,7 +38,7 @@ def login(request):
                 request.session['user_id'] = user.id
                 return redirect('bank_account')
             except User.DoesNotExist:
-                return redirect('login')
+                return render(request, 'login.html', {'form': form})
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -57,6 +61,7 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 #safe login that checks for encrypted passwords
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
