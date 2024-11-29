@@ -42,7 +42,7 @@ def login(request):
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
-"""
+'''
 #safe register that encrypts password
 def register(request):
     if request.method == 'POST':
@@ -80,21 +80,22 @@ def login(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
-"""
+'''
 def bank_account(request):
     user_id = request.session.get("user_id")
+    
     if not user_id:
         return redirect("login")
+
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return redirect("login")
     response = render(request, "bank_account.html", {"user": user})
-    #to prevent users from going back after another user has logged out
     #response['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
     #response['Pragma'] = 'no-cache'
-    return response
 
+    return response
 
 def logout(request):
     request.session.flush()
@@ -104,15 +105,12 @@ def search_users(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
-
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return redirect('login')
-
     search_query = request.GET.get('q', '')
     users = []
-
     #unsafe query
     if search_query:
         raw_query = f"SELECT username FROM bank_user WHERE username LIKE '%{search_query}%'"
@@ -123,12 +121,15 @@ def search_users(request):
     #safe query:
     #if search_query:
     #    users = User.objects.filter(username__icontains=search_query).values_list('username', flat=True)
-
-    return render(request, 'bank_account.html', {
+    response = render(request, 'bank_account.html', {
         'user': user,
         'users': users,
         'query': search_query,
     })
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+    response['Pragma'] = 'no-cache'
+    return response
+
 
 #atomic transaction is not used
 #@transaction.atomic
@@ -160,8 +161,9 @@ def transfer_money(request):
 
         if sender.balance < amount:
             return redirect('bank_account')
+        if sender == recipient:
+            return redirect('bank_account')
 
-        
         sender.balance -= amount
         recipient.balance += amount
         sender.save()
