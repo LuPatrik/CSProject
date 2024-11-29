@@ -125,7 +125,8 @@ def search_users(request):
         'query': search_query,
     })
 
-@transaction.atomic
+#atomic transaction is not used
+#@transaction.atomic
 def transfer_money(request):
     if request.method == 'POST':
         sender_id = request.session.get('user_id')
