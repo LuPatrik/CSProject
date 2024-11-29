@@ -8,7 +8,7 @@ from decimal import Decimal
 def index(request):
     return render(request, "index.html")
 
-#vulnerable register
+#register that doesnt encrypt password
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -22,7 +22,7 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
 
-#vulnerable login
+#login that doesnt check for encrypted passwords
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -38,8 +38,9 @@ def login(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
 """
-#safe register
+#safe register that encrypts password
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -55,7 +56,7 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
 
-#safe login
+#safe login that checks for encrypted passwords
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
