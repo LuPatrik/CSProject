@@ -16,7 +16,7 @@ class RegistrationForm(forms.ModelForm):
     def clean_password(self):
         password = self.cleaned_data.get('password')
         #passwords are not checked for their security
-        
+        """
         has_letter = any(char.isalpha() for char in password)
         has_number = any(char.isdigit() for char in password)
         if not has_letter:
@@ -25,7 +25,7 @@ class RegistrationForm(forms.ModelForm):
             raise ValidationError("Password must contain at least one number!")
         if len(password) < 8:
             raise ValidationError("Password must be at least 8 characters long!")
-        
+        """
         return password
 
 class LoginForm(forms.Form):
