@@ -11,3 +11,5 @@ This is a simple banking site with cyber security flaws from OWASP 10 2021.
 
 ### To run
 To run do ```python manage.py runserver```
+
+Also for testing purposes each new user starts with a balance of $10.00
