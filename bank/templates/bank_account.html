@@ -8,7 +8,6 @@
 <body>
     <h1>Welcome, {{ user.username }}!</h1>
     <p>Your current balance is: ${{ user.balance }}</p>
-    <p><a href="{% url 'index' %}">Back to Home</a></p>
     <p><a href="{% url 'logout' %}">Logout</a></p>
     <hr>
     <h2>Send Money</h2>
